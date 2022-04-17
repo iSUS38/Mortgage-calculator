@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AG Bank</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="reset.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1><strong>AG Bank</strong></h1>
+        <nav>
+            <a href="informationPage.html" target="_blank">Get personal information </a>
+        </nav>
+    </header>
+    <main class="main-first-page">
+        <section class="take-a-mortgage-section">
+            <h2>Get started with credit experience with <em>AG Bank</em></h2>
+            <form action="informationPage.html" id="form">
+                <fieldset>
+                    <label>Enter your personal login</label>
+                    <input type="text" id="login">
+                </fieldset>
+                <fieldset>
+                    <label>Enter the loan amount, which would you like to take</label>
+                    <input type="text" id="loanAmount" placeholder="Loan amount">
+                </fieldset>
+                <fieldset>
+                    <label>Enter an interest rate (%)</label>
+                    <input type="number" id="rate" placeholder="Rate">
+                </fieldset>
+                <fieldset>
+                    <label>Enter the Loan Term(years)</label>
+                    <input type="number" id="term" placeholder="Term">
+                </fieldset>
+                <div class="submit-button">
+                    <button type="submit" id="submitButton">Submit</button>
+                </div>
+            </form>
+        </section>
+        <section class="information-section">
+            <h3>Please, pay attention</h3>
+            <ul>
+                <li>The max. amount of money a bank is able to borrow is 500 000 &dollar;</li>
+                <li>Minimum down payment is 20%</li>
+                <li>The min. term is 1 year</li>
+            </ul>               
+        </section>
+    </main>
+</body>
+</html>

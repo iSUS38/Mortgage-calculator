@@ -55,7 +55,7 @@ window.onload = function (){
         let loanAmountTest = regExp.test(loanAmountVal);
 
         if(loginVal.length <= 3){
-            alert("You have missed some inputs");
+            alert("Your login length is not enough");
             checkInputResult = false;
         } else if(rateVal <= 1 || rateVal >= 20){
             alert("Enter another rate and try again");

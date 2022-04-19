@@ -1,7 +1,7 @@
 window.onload = function (){
     var button = document.getElementById("submitButton");
     var form = document.getElementById("form");
-    var userLogin = document.getElementById("login");
+    var bankName = document.getElementById("bankName");
     var userLoanAmount = document.getElementById("loanAmount");
     var userRate = document.getElementById("rate");
     var userTerm = document.getElementById("term")
@@ -13,6 +13,8 @@ window.onload = function (){
     var fieldForMonthlyPayment = document.getElementById("fieldForMonthlyPayment");
     var fieldForTotalPayment = document.getElementById("fieldForTotalPayment");
     var checkInputResult = true;
+    var deleteButtonBlock = document.querySelector(".delete-bank");
+    var deleteButton = document.querySelector(".delete-bank button");
     var monthlyPayment;
     var maxAmount = 500000;
     var minTerm = 0.6;
@@ -32,7 +34,7 @@ window.onload = function (){
 	    return mPayment.toFixed(2);
     }
 
-    function changeButtonBackground(){
+    function changeButtonBackground(button){
         button.style.backgroundColor = "green";
         setTimeout(function(){
             button.style.backgroundColor = "#7289da";
@@ -47,14 +49,14 @@ window.onload = function (){
 
     function checkInputs(){
 
-        let loginVal = userLogin.value;
+        let bankNameVal = bankName.value;
         let rateVal = userRate.value;
         let loanAmountVal = userLoanAmount.value;
         let termVal = userTerm.value;
         let regExp = /^\d+$/;
         let loanAmountTest = regExp.test(loanAmountVal);
 
-        if(loginVal.length <= 3){
+        if(bankNameVal.length <= 3){
             alert("Your login length is not enough");
             checkInputResult = false;
         } else if(rateVal <= 1 || rateVal >= 20){
@@ -72,31 +74,35 @@ window.onload = function (){
     body.addEventListener('submit', function(sub){
         sub.preventDefault();
         checkInputs();
+        if(checkInputResult === false){
+            checkInputResult = true;
+            return sub;
+        }
+        
+        changeButtonBackground(button);
 
-        if(checkInputResult === true){
-            changeButtonBackground();
-
-            var data = {
-                'login': userLogin.value,
-                'loanAmount': userLoanAmount.value,
-                'rate': userRate.value,
-                'term': userTerm.value,
-                'downPayment': getDownPaymentSum(userLoanAmount),
-                'monthlyPayment': calculatePayment(),
-                'totalPayment': calcTotalPayment()
-            }
+        var data = {
+            'bankName': bankName.value,
+            'loanAmount': userLoanAmount.value,
+            'rate': userRate.value,
+            'term': userTerm.value,
+            'downPayment': getDownPaymentSum(userLoanAmount),
+            'monthlyPayment': calculatePayment(),
+            'totalPayment': calcTotalPayment()
         }
 
-        checkInputResult = true;
-        localStorage.setItem(data.login, JSON.stringify(data));
+        localStorage.setItem(data.bankName, JSON.stringify(data));
     });
 
-    var loginInput = document.querySelector(".login-input input");
-    loginInput.addEventListener('keyup', function(){
+    var bankInput = document.querySelector(".login-input input");
+    bankInput.addEventListener('keyup', function(){
         for(key in localStorage){
-            if(loginInput.value == key){
-                //this.setAttribute('disabled', true);
+            if(bankInput.value == key){
                 let user = JSON.parse(localStorage.getItem(key));
+                
+                this.setAttribute('disabled', true);
+                deleteButtonBlock.style.display = "block";
+
                 fieldForRate.value = user.rate + '%';
                 fieldForTerm.value = user.term + ' year(s)';
                 fieldForInitalLoan.value = '$' + user.loanAmount;
@@ -105,5 +111,15 @@ window.onload = function (){
                 fieldForTotalPayment.value = '$' + user.totalPayment;
             }
         }
+    });
+
+    deleteButton.addEventListener("click", function (){
+        let bankInputVal = bankInput.value;
+        localStorage.removeItem(bankInputVal);
+        changeButtonBackground(deleteButton);
+        setTimeout(function(){
+            window.location.reload();
+
+        }, 2000);
     });
 };

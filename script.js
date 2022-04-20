@@ -1,6 +1,5 @@
 window.onload = function (){
     var button = document.getElementById("submitButton");
-    var form = document.getElementById("form");
     var bankName = document.getElementById("bankName");
     var userLoanAmount = document.getElementById("loanAmount");
     var userRate = document.getElementById("rate");
@@ -15,9 +14,24 @@ window.onload = function (){
     var checkInputResult = true;
     var deleteButtonBlock = document.querySelector(".delete-bank");
     var deleteButton = document.querySelector(".delete-bank button");
+    var bankInput = document.querySelector(".login-input input");
     var monthlyPayment;
     var maxAmount = 500000;
     var minTerm = 0.6;
+    var bankSelect = document.querySelector(".bank-select");
+    var storageKeys = Object.keys(localStorage);
+
+
+    function fillInfoInputs(){
+        let bank = JSON.parse(localStorage.getItem(key));
+
+        fieldForRate.value = bank.rate + '%';
+        fieldForTerm.value = bank.term + ' year(s)';
+        fieldForInitalLoan.value = '$' + bank.loanAmount;
+        fieldForDownPayment.value = '$' + bank.downPayment;
+        fieldForMonthlyPayment.value = '$' + bank.monthlyPayment;
+        fieldForTotalPayment.value = '$' + bank.totalPayment;
+    }
 
     function getDownPaymentSum(userLoanAmount){
         return Number(userLoanAmount.value) * 0.2;
@@ -94,28 +108,47 @@ window.onload = function (){
         localStorage.setItem(data.bankName, JSON.stringify(data));
     });
 
-    var bankInput = document.querySelector(".login-input input");
+    if(localStorage.length !== 0){
+        for(var i = 0; i < storageKeys.length; i++){
+            bankSelect.insertAdjacentHTML('beforeend', `<option>${storageKeys[i]}</option>`);
+        }
+    }
+
+    bankSelect.addEventListener("change", function(){
+        let selectedItem = bankSelect.value;
+        for(key in localStorage){
+            if(selectedItem === key){
+                bankInput.value = "";
+                bankInput.setAttribute('placeholder', "Enter a bank name");
+                deleteButtonBlock.style.display = "block";
+                fillInfoInputs();
+            }
+
+        }
+    });
+
     bankInput.addEventListener('keyup', function(){
         for(key in localStorage){
             if(bankInput.value == key){
-                let user = JSON.parse(localStorage.getItem(key));
-                
-                this.setAttribute('disabled', true);
+                bankSelect.value = "Choose a bank";
+
+                //this.setAttribute('disabled', true);
                 deleteButtonBlock.style.display = "block";
 
-                fieldForRate.value = user.rate + '%';
-                fieldForTerm.value = user.term + ' year(s)';
-                fieldForInitalLoan.value = '$' + user.loanAmount;
-                fieldForDownPayment.value = '$' + user.downPayment;
-                fieldForMonthlyPayment.value = '$' + user.monthlyPayment;
-                fieldForTotalPayment.value = '$' + user.totalPayment;
+                fillInfoInputs();
             }
         }
     });
 
+    function deleteKeyFromStorage(){
+        localStorage.removeItem(bankInput.value);
+        localStorage.removeItem(bankSelect.value);
+    }
+
     deleteButton.addEventListener("click", function (){
-        let bankInputVal = bankInput.value;
-        localStorage.removeItem(bankInputVal);
+        
+        deleteKeyFromStorage();
+
         changeButtonBackground(deleteButton);
         setTimeout(function(){
             window.location.reload();

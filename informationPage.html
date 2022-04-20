@@ -2,18 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AG Bank</title>
+    <title>AG</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="reset.css">
     <script src="script.js"></script> 
 </head>
 <body>
     <header>
-        <h1><strong>AG Bank</strong></h1>
+        <h1><strong>AG Payments</strong></h1>
     </header>
     <main>
-        <div class="login-input">
-            <input type="text" placeholder="Enter a bank name">
+        <div>
+            <div class="login-input">
+                <input type="text" placeholder="Enter a bank name">
+            </div>
+            <div>
+                <span>OR</span>
+            </div>
+            <div class="select-block">
+                <select class="bank-select">
+                    <option selected hidden>Choose a bank</option>
+                </select>
+            </div>
         </div>
         <section class="payment-information-section">
             <div>
